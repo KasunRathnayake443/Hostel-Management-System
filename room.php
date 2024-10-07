@@ -1,3 +1,9 @@
+<?php
+session_start();
+include 'connection.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,7 +75,7 @@ while ($room = $result->fetch_assoc()) {
 <div class="card mb-4 border-0 shadow">
    <div class="row g-0 p-3 align-items-center">
       <div class="col-md-5 mb-lg-0 mb-md-0 mb-3">
-         <img src="images/rooms/<?php echo $room['picture']; ?>" class="img-fluid rounded" alt="Room Image">
+         <img src="images/rooms/<?php echo $room['picture']; ?>" height="200px"  width="400px" class="img-fluid rounded" alt="Room Image">
       </div>
       <div class="col-md-5 px-lg-3 px-md-3 px-0">
          <h5 class="mb-3"><?php echo $room['name']; ?></h5>

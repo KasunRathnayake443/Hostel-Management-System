@@ -1,3 +1,10 @@
+<?php
+session_start();
+include 'connection.php';
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,209 +102,94 @@ include 'connection.php'; ?>
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">HOSTEL ROOMS</h2>
 <div class="container">
   <div class="row">
-    <div class="col-lg-4 col-md-6 my-3">
-       <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-        <img src="room1.png" class="card-img-top">
+    <?php
+    
+    $result = $conn->query("SELECT * FROM rooms LIMIT 3");
 
-        <div class="card-body">
-          <h5>Simple Room Name</h5>
-          <h6 class="mb-4">For 4 Students</h6>
-          <div class="features mb-4">
+   
+    while ($room = $result->fetch_assoc()) {
+    ?>
+      <div class="col-lg-4 col-md-6 my-3">
+        <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
+          <img src="images/rooms/<?php echo $room['picture']; ?>" height="200px" class="card-img-top">
+
+          <div class="card-body">
+            <h5><?php echo $room['name']; ?></h5>
+            <h6 class="mb-4">For <?php echo $room['students']; ?> Students</h6>
+            
+            <div class="features mb-4">
               <h6 class="mb-1">Features</h6>
-              <span class="badge rounded-pill bg-light text-dark text-wrap">
-               Four Beds
+              <?php
+              $features = explode(', ', $room['features']);
+              foreach ($features as $feature) {
+                echo '<span class="badge rounded-pill bg-light text-dark text-wrap">' . $feature . '</span>';
+              }
+              ?>
+            </div>
+
+            <div class="facilities mb-4">
+              <h6 class="mb-1">Facilities</h6>
+              <?php
+              $facilities = explode(', ', $room['facilities']);
+              foreach ($facilities as $facility) {
+                echo '<span class="badge rounded-pill bg-light text-dark text-wrap">' . $facility . '</span>';
+              }
+              ?>
+            </div>
+
+            <div class="rating mb-4">
+              <h6 class="mb-1">Rating</h6>
+              <span class="badge rounded-pill bg-light">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
               </span>
-              <span class="badge rounded-pill bg-light text-dark text-wrap">
-                Balcony
-               </span>
-               <span class="badge rounded-pill bg-light text-dark text-wrap">
-                Four chairs and Desks for each students
-               </span>
-               <span class="badge rounded-pill bg-light text-dark text-wrap">
-                Study Area
-               </span>
+            </div>
+
+            <div class="d-flex justify-content-evenly mb-2">
+              <a href="book_room.php?room_id=<?php echo $room['id']; ?>" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
+              <a href="room_details.php?room_id=<?php echo $room['id']; ?>" class="btn btn-sm btn-outline-dark shadow-none">More Details</a>
+            </div>
           </div>
-          <div class="facilities mb-4">
-            <h6 class="mb-1">Facilities</h6>
-            <span class="badge rounded-pill bg-light text-dark text-wrap">
-              Fans
-             </span>
-             <span class="badge rounded-pill bg-light text-dark text-wrap">
-               Water purifiers
-              </span>
-              <span class="badge rounded-pill bg-light text-dark text-wrap">
-               Common Canteen
-              </span>
-              <span class="badge rounded-pill bg-light text-dark text-wrap">
-               Common Area
-              </span>
-          </div>
-          <div class="rating mb-4">
-            <h6 class="mb-1">Rating</h6>
-            <span class="badge rounded-pill bg-light">
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-            </span>
-          </div>
-          <div class="d-flex justify-content-evenly mb-2">
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More Details</a>
-          </div>
-         
         </div>
       </div>
-
-   </div>
-
-   <div class="col-lg-4 col-md-6 my-3">
-    <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-     <img src="room1.png" class="card-img-top">
-
-     <div class="card-body">
-       <h5>Simple Room Name</h5>
-       <h6 class="mb-4">For 4 Students</h6>
-       <div class="features mb-4">
-           <h6 class="mb-1">Features</h6>
-           <span class="badge rounded-pill bg-light text-dark text-wrap">
-            Four Beds
-           </span>
-           <span class="badge rounded-pill bg-light text-dark text-wrap">
-             Balcony
-            </span>
-            <span class="badge rounded-pill bg-light text-dark text-wrap">
-             Four chairs and Desks for each students
-            </span>
-            <span class="badge rounded-pill bg-light text-dark text-wrap">
-             Study Area
-            </span>
-       </div>
-       <div class="facilities mb-4">
-         <h6 class="mb-1">Facilities</h6>
-         <span class="badge rounded-pill bg-light text-dark text-wrap">
-           Fans
-          </span>
-          <span class="badge rounded-pill bg-light text-dark text-wrap">
-            Water purifiers
-           </span>
-           <span class="badge rounded-pill bg-light text-dark text-wrap">
-            Common Canteen
-           </span>
-           <span class="badge rounded-pill bg-light text-dark text-wrap">
-            Common Area
-           </span>
-       </div>
-       <div class="rating mb-4">
-         <h6 class="mb-1">Rating</h6>
-         <span class="badge rounded-pill bg-light">
-         <i class="bi bi-star-fill text-warning"></i>
-         <i class="bi bi-star-fill text-warning"></i>
-         <i class="bi bi-star-fill text-warning"></i>
-         <i class="bi bi-star-fill text-warning"></i>
-         </span>
-       </div>
-       <div class="d-flex justify-content-evenly mb-2">
-         <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-         <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More Details</a>
-       </div>
-      
-     </div>
-   </div>
-
-</div>
-
-<div class="col-lg-4 col-md-6 my-3">
-  <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-   <img src="room1.png" class="card-img-top">
-
-   <div class="card-body">
-     <h5>Simple Room Name</h5>
-     <h6 class="mb-4">For 4 Students</h6>
-     <div class="features mb-4">
-         <h6 class="mb-1">Features</h6>
-         <span class="badge rounded-pill bg-light text-dark text-wrap">
-          Four Beds
-         </span>
-         <span class="badge rounded-pill bg-light text-dark text-wrap">
-           Balcony
-          </span>
-          <span class="badge rounded-pill bg-light text-dark text-wrap">
-           Four chairs and Desks for each students
-          </span>
-          <span class="badge rounded-pill bg-light text-dark text-wrap">
-           Study Area
-          </span>
-     </div>
-     <div class="facilities mb-4">
-       <h6 class="mb-1">Facilities</h6>
-       <span class="badge rounded-pill bg-light text-dark text-wrap">
-         Fans
-        </span>
-        <span class="badge rounded-pill bg-light text-dark text-wrap">
-          Water purifiers
-         </span>
-         <span class="badge rounded-pill bg-light text-dark text-wrap">
-          Common Canteen
-         </span>
-         <span class="badge rounded-pill bg-light text-dark text-wrap">
-          Common Area
-         </span>
-     </div>
-     <div class="rating mb-4">
-       <h6 class="mb-1">Rating</h6>
-       <span class="badge rounded-pill bg-light">
-       <i class="bi bi-star-fill text-warning"></i>
-       <i class="bi bi-star-fill text-warning"></i>
-       <i class="bi bi-star-fill text-warning"></i>
-       <i class="bi bi-star-fill text-warning"></i>
-       </span>
-     </div>
-     <div class="d-flex justify-content-evenly mb-2">
-       <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-       <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More Details</a>
-     </div>
+    <?php
+    } 
+    ?>
     
-   </div>
- </div>
-
-</div>
-   <div class="col-lg-12 text-center mt-5">
-    <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
-
-   </div>
+    <div class="col-lg-12 text-center mt-5">
+      <a href="room.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
+    </div>
   </div>
 </div>
+
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">HOSTEL FACILITIES</h2>
 
 <div class="container">
   <div class="row justify-content-evenly px-lg-0 px-md-0 px-5">
-    <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-      <img src="library.png" width="80px">
-      <h5 class="mt-3">Library</h5>
-    </div>
-    <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-      <img src="food.png" width="80px">
-      <h5 class="mt-3">Foods</h5>
-    </div>
-    <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-      <img src="common are.png" width="80px">
-      <h5 class="mt-3">Common Area</h5>
-    </div>
-    <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-      <img src="wifi.png" width="100px">
-      <h5 class="mt-3">WiFi</h5>
-    </div>
-    <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-      <img src="health.png" width="80px">
-      <h5 class="mt-3">Health Care Center</h5>
-    </div>
+    <?php
+    
+    $result = $conn->query("SELECT * FROM facilities LIMIT 5");
+
+   
+    while ($facility = $result->fetch_assoc()) {
+    ?>
+      <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+        <img src="images/facilities/<?php echo $facility['icon']; ?>" width="80px">
+        <h5 class="mt-3"><?php echo $facility['name']; ?></h5>
+      </div>
+    <?php
+    } 
+    ?>
+    
     <div class="col-lg-12 text-center mt-5">
-      <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Facilities >>></a>
+      <a href="facilities.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Facilities >>></a>
     </div>
   </div>
 </div>
+
 
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">HOSTEL TESTIMONIALS</h2>

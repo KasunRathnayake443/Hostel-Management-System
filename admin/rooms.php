@@ -16,8 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_room_form'])) {
     $picture = $_FILES['picture']['name'];
     $picture_tmp = $_FILES['picture']['tmp_name'];
     $picture_name = basename($picture);
-    $picture_path = "../images/rooms/" . $picture_name;
+    $picture_path =  $picture_name;
     move_uploaded_file($picture_tmp, $picture_path);
+    
+    
 
 
     $stmt = $conn->prepare("INSERT INTO rooms (name, area, fees, quantity, students, description, facilities, features, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -60,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_room'])) {
         $picture = $_FILES['picture']['name'];
         $picture_tmp = $_FILES['picture']['tmp_name'];
         $picture_name = basename($picture); 
-        $picture_path = "../images/rooms/" . $picture_name;
+        $picture_path =  $picture_name;
         move_uploaded_file($picture_tmp, $picture_path);
     
         

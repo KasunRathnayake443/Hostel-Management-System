@@ -39,18 +39,18 @@ if ((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] === true)) {
             <div class="mb-4">
                 <input name="admin_pass" required type="password" class="form-control shadow-none text-center" placeholder="Password">
             </div>
-            <button name="login" type="submit" class="btn text-white custom-bg shadow-none">LOGIN</button>
+            <button name="login" type="submit" class="btn text-white btn btn-primary">LOGIN</button>
         </div>
     </form>
 </div>
 
 <?php 
 
-if(isset($_POST['login']))  // Corrected the isset condition
+if(isset($_POST['login']))  
 {
     $frm_data = filteration($_POST);
 
-    $query = "SELECT * FROM `admin_cred` WHERE `admin_name`=? AND `admin_pass`=?";  // Corrected the SQL query syntax
+    $query = "SELECT * FROM `admin_cred` WHERE `admin_name`=? AND `admin_pass`=?";  
     $values = [$frm_data['admin_name'], $frm_data['admin_pass']];
 
     $res = select($query, $values, "ss");
