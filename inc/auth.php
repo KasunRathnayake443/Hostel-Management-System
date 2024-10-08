@@ -2,49 +2,54 @@
 
 include('../connection.php');
 session_start(); 
+
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
     
-    if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] == 0) {
-        $profile_pic = $_FILES['profile_pic']['name'];
-        $temp_name = $_FILES['profile_pic']['tmp_name'];
-        
-       
-        $upload_dir = '../images/profile_pic/';
-        
-        
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-        
-        
-        move_uploaded_file($temp_name, $upload_dir . $profile_pic);
-        
-    } else {
-        echo "Error: Unable to upload profile picture.";
-        $profile_pic = ''; 
+    $picture = $_FILES['profile_pic']['name'];
+    $picture_tmp = $_FILES['profile_pic']['tmp_name'];
+    $picture_name = basename($picture);
+    
+  
+    $upload_dir = '../images/profile_pic/';
+    
+   
+    if (!file_exists($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
     }
 
+    $picture_path = $upload_dir . $picture_name;
+    move_uploaded_file($picture_tmp, $picture_path);
     
+
+   
+    
+
+
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phonenum = $_POST['phonenum'];
     $address = $_POST['address'];
     $dob = $_POST['dob'];
-    $pass = $_POST['pass'];  
+    $pass = $_POST['pass'];
 
-   
+    
     $sql = "INSERT INTO `user` (name, email, phone_no, address, date_of_birth, password, profile_pic) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssss", $name, $email, $phonenum, $address, $dob, $pass, $profile_pic);
+    $stmt->bind_param("sssssss", $name, $email, $phonenum, $address, $dob, $pass, $picture_name);
     
-   
+    
     if ($stmt->execute()) {
-        echo "<script>alert('User Registration Success'); document.location='../index.php';</script>";
+        echo "<script>alert('User Registration Success');document.location='../index.php'; </script>";
     } else {
         echo "Error: " . $stmt->error;
     }
 }
+
+
 
 
 if (isset($_POST['login'])) {

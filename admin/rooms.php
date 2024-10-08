@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_room_form'])) {
     $picture_tmp = $_FILES['picture']['tmp_name'];
     $picture_name = basename($picture);
     
-    // Set the upload directory for room images
+  
     $upload_dir = '../images/rooms/';
     
-    // Create the directory if it doesn't exist
+   
     if (!file_exists($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }
@@ -68,10 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_room'])) {
         $picture_tmp = $_FILES['picture']['tmp_name'];
         $picture_name = basename($picture);
         
-        // Set the upload directory for room images
+        
         $upload_dir = '../images/rooms/';
         
-        // Create the directory if it doesn't exist
+        
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
