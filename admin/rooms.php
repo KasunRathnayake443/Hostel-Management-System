@@ -3,6 +3,7 @@ require('essentials.php');
 require('db_config.php');
 include '../connection.php';
 adminLogin();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_room_form'])) {
     $name = $_POST['name'];
     $area = $_POST['area'];
@@ -16,18 +17,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_room_form'])) {
     $picture = $_FILES['picture']['name'];
     $picture_tmp = $_FILES['picture']['tmp_name'];
     $picture_name = basename($picture);
-    $picture_path =  $picture_name;
-    move_uploaded_file($picture_tmp, $picture_path);
     
+    // Set the upload directory for room images
+    $upload_dir = '../images/rooms/';
     
+    // Create the directory if it doesn't exist
+    if (!file_exists($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
 
+    $picture_path = $upload_dir . $picture_name;
+    move_uploaded_file($picture_tmp, $picture_path);
 
     $stmt = $conn->prepare("INSERT INTO rooms (name, area, fees, quantity, students, description, facilities, features, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssisissss", $name, $area, $fees, $quantity, $students, $desc, $facilities, $features, $picture_path);
+    $stmt->bind_param("ssisissss", $name, $area, $fees, $quantity, $students, $desc, $facilities, $features, $picture_name);
     $stmt->execute();
-    $room_id = $stmt->insert_id; 
+    $room_id = $stmt->insert_id;
 
-    
     $create_table_query = "CREATE TABLE room_$room_id (
         id INT AUTO_INCREMENT PRIMARY KEY,
         student_id INT,
@@ -38,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_room_form'])) {
     )";
     $conn->query($create_table_query);
 
-    
     for ($i = 1; $i <= $quantity; $i++) {
         $conn->query("INSERT INTO room_$room_id (availability) VALUES (1)");
     }
@@ -61,31 +66,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_room'])) {
     if (!empty($_FILES['picture']['name'])) {
         $picture = $_FILES['picture']['name'];
         $picture_tmp = $_FILES['picture']['tmp_name'];
-        $picture_name = basename($picture); 
-        $picture_path =  $picture_name;
-        move_uploaded_file($picture_tmp, $picture_path);
-    
+        $picture_name = basename($picture);
         
+        // Set the upload directory for room images
+        $upload_dir = '../images/rooms/';
+        
+        // Create the directory if it doesn't exist
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
+        $picture_path = $upload_dir . $picture_name;
+        move_uploaded_file($picture_tmp, $picture_path);
+
         $stmt = $conn->prepare("UPDATE rooms SET name=?, area=?, fees=?, quantity=?, students=?, description=?, facilities=?, features=?, picture=? WHERE id=?");
         $stmt->bind_param("siisissssi", $name, $area, $fees, $quantity, $students, $desc, $facilities, $features, $picture_name, $id);
     } else {
-        
         $stmt = $conn->prepare("UPDATE rooms SET name=?, area=?, fees=?, quantity=?, students=?, description=?, facilities=?, features=? WHERE id=?");
         $stmt->bind_param("ssiissssi", $name, $area, $fees, $quantity, $students, $desc, $facilities, $features, $id);
     }
-    
-    $stmt->execute();
-    
 
-   
+    $stmt->execute();
+
     $current_row_count = $conn->query("SELECT COUNT(*) FROM room_$id")->fetch_row()[0];
     if ($quantity > $current_row_count) {
-       
         for ($i = $current_row_count + 1; $i <= $quantity; $i++) {
             $conn->query("INSERT INTO room_$id (availability) VALUES (1)");
         }
     } elseif ($quantity < $current_row_count) {
-      
         $conn->query("DELETE FROM room_$id ORDER BY id DESC LIMIT " . ($current_row_count - $quantity));
     }
 
@@ -96,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_room'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_room'])) {
     $id = $_POST['room_id'];
 
-   
     $conn->query("DROP TABLE IF EXISTS room_$id");
 
     $stmt = $conn->prepare("DELETE FROM rooms WHERE id=?");
@@ -106,9 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_room'])) {
     header('Location: rooms.php');
     exit();
 }
-
-
-
 
 $facilities = $conn->query("SELECT * FROM facilities");
 $features = $conn->query("SELECT * FROM features");
