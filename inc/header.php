@@ -100,7 +100,7 @@ $contact_r = mysqli_fetch_assoc(select($contact_q,$values,'i'));
 <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-    <form action="inc/auth.php" method="POST" id="register-form">
+    <form action="inc/auth.php" method="POST" id="register">
     <div class="modal-header">
         <h5 class="modal-title display-flex align-items-center">
         <i class="bi bi-person-lines-fill fs-3 me-2"></i>User Registration

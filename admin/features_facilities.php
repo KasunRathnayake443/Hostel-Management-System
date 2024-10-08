@@ -2,29 +2,29 @@
 require('essentials.php');
 require('db_config.php');
 include '../connection.php';
-adminLogin(); // Ensure the admin is logged in
+adminLogin(); 
 
-// Handle feature form submission
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feature_name'])) {
     $feature_name = $_POST['feature_name'];
 
-    // Insert the new feature into the database
+    
     $stmt = $conn->prepare("INSERT INTO features (name) VALUES (?)");
     $stmt->bind_param("s", $feature_name);
     $stmt->execute();
 
-    // Redirect back to the features and facilities page
+    
     header('Location: features_facilities.php');
     exit();
 }
 
-// Handle facility form submission
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['facility_name'])) {
     $facility_name = $_POST['facility_name'];
     $facility_desc = $_POST['facility_desc'];
     $facility_icon = '';
 
-    // Handle the facility icon upload
+   
     if (isset($_FILES['facility_icon']['name']) && $_FILES['facility_icon']['name'] != '') {
         $icon_name = $_FILES['facility_icon']['name'];
         $icon_tmp = $_FILES['facility_icon']['tmp_name'];
@@ -40,17 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['facility_name'])) {
         }
     }
 
-    // Insert the new facility into the database
+   
     $stmt = $conn->prepare("INSERT INTO facilities (name, description, icon) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $facility_name, $facility_desc, $facility_icon);
     $stmt->execute();
 
-    // Redirect back to the features and facilities page
+
     header('Location: features_facilities.php');
     exit();
 }
 
-// Fetch all features and facilities to display
+
 $features = $conn->query("SELECT * FROM features");
 $facilities = $conn->query("SELECT * FROM facilities");
 ?>

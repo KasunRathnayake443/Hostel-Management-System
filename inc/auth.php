@@ -2,40 +2,48 @@
 
 include('../connection.php');
 session_start(); 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
+    
+    if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] == 0) {
+        $profile_pic = $_FILES['profile_pic']['name'];
+        $temp_name = $_FILES['profile_pic']['tmp_name'];
+        
+       
+        $upload_dir = '../images/profile_pic/';
+        
+        
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+        
+        
+        move_uploaded_file($temp_name, $upload_dir . $profile_pic);
+        
+    } else {
+        echo "Error: Unable to upload profile picture.";
+        $profile_pic = ''; 
+    }
 
-
-if (isset($_POST['register'])) {
+    
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phonenum = $_POST['phonenum'];
     $address = $_POST['address'];
     $dob = $_POST['dob'];
-    $pass = $_POST['pass'];
-    $cpass = $_POST['cpass'];
-
- 
-    if ($pass !== $cpass) {
-        echo "Passwords do not match!";
-        exit();
-    }
+    $pass = $_POST['pass'];  
 
    
-    $profilePic = $_FILES['profile_pic']['name'];
-    $targetDir = "../images/profile_pic/";  
-    $targetFile = $targetDir . basename($profilePic);
-    move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $targetFile);
-
+    $sql = "INSERT INTO `user` (name, email, phone_no, address, date_of_birth, password, profile_pic) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssss", $name, $email, $phonenum, $address, $dob, $pass, $profile_pic);
     
-    $stmt = $conn->prepare("INSERT INTO user (name, email, phone_no, address, date_of_birth, password, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssss", $name, $email, $phonenum, $address, $dob, $pass, $profilePic);
-
+   
     if ($stmt->execute()) {
-        echo "Registration successful!";
+        echo "<script>alert('User Registration Success'); document.location='../index.php';</script>";
     } else {
         echo "Error: " . $stmt->error;
     }
-
-    $stmt->close();
 }
 
 
@@ -62,7 +70,7 @@ if (isset($_POST['login'])) {
             echo "<script>alert('Invalid email or password!')</script>";
         }
     } else {
-        echo "<script>alert('Invalid email or password!')</script>";
+        echo "<script>alert('Invalid email or password!'); document.location='../index.php';</script>";
     }
 
     $stmt->close();
