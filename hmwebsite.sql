@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2024 at 07:21 PM
+-- Generation Time: Nov 03, 2024 at 05:35 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -147,18 +147,19 @@ CREATE TABLE `rooms` (
   `picture` varchar(100) NOT NULL,
   `facilities` varchar(100) NOT NULL,
   `features` varchar(100) NOT NULL,
-  `description` varchar(100) NOT NULL
+  `description` varchar(100) NOT NULL,
+  `table_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `name`, `area`, `fees`, `quantity`, `students`, `picture`, `facilities`, `features`, `description`) VALUES
-(13, 'Rooms for Two', 'Villa 1', 1000, 30, 2, 'main-qimg-6f16fe8e063bfbbedf69d8fdc368dc2a.webp', 'test 2, test 3', 'Test 1, Test 2', 'Villa 1 rooms for two students'),
-(14, 'Rooms for Four', 'Villa 2', 3000, 20, 4, '5a7458c54f34370001330055__MG_8845.jpg', 'test 2, test 5', 'Test 1', 'Villa 2 rooms for four students'),
-(15, 'Rooms for Two', 'Villa 2', 1500, 40, 2, 'hostel-bureau.jpg', 'test 1, test 2, test 5', 'Test 1', 'Villa 2 rooms for two students'),
-(17, 'Room for Four', 'villa 1', 2000, 50, 4, 'AtlasDormDSC_8778301220.jpg', 'test 1, test 5', 'Test 1, Test 2', 'Villa 1 rooms for four students');
+INSERT INTO `rooms` (`id`, `name`, `area`, `fees`, `quantity`, `students`, `picture`, `facilities`, `features`, `description`, `table_name`) VALUES
+(13, 'Rooms for Two', 'Villa 1', 1000, 30, 2, 'main-qimg-6f16fe8e063bfbbedf69d8fdc368dc2a.webp', 'test 2, test 3', 'Test 1, Test 2', 'Villa 1 rooms for two students', 'room_13'),
+(14, 'Rooms for Four', 'Villa 2', 3000, 20, 4, '5a7458c54f34370001330055__MG_8845.jpg', 'test 2, test 5', 'Test 1', 'Villa 2 rooms for four students', 'room_14'),
+(15, 'Rooms for Two', 'Villa 2', 1500, 40, 2, 'hostel-bureau.jpg', 'test 1, test 2, test 5', 'Test 1', 'Villa 2 rooms for two students', 'room_15'),
+(17, 'Room for Four', 'villa 1', 2000, 50, 4, 'AtlasDormDSC_8778301220.jpg', 'test 1, test 5', 'Test 1, Test 2', 'Villa 1 rooms for four students', 'room_17');
 
 -- --------------------------------------------------------
 
@@ -172,44 +173,46 @@ CREATE TABLE `room_13` (
   `booked_date` date DEFAULT NULL,
   `from` date DEFAULT NULL,
   `to` date DEFAULT NULL,
-  `availability` int(11) DEFAULT 1
+  `availability` int(11) DEFAULT 1,
+  `fee` int(11) NOT NULL,
+  `fee_status` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_13`
 --
 
-INSERT INTO `room_13` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`) VALUES
-(1, NULL, NULL, NULL, NULL, 0),
-(2, NULL, NULL, NULL, NULL, 1),
-(3, NULL, NULL, NULL, NULL, 1),
-(4, NULL, NULL, NULL, NULL, 1),
-(5, NULL, NULL, NULL, NULL, 1),
-(6, NULL, NULL, NULL, NULL, 1),
-(7, NULL, NULL, NULL, NULL, 1),
-(8, NULL, NULL, NULL, NULL, 1),
-(9, NULL, NULL, NULL, NULL, 1),
-(10, NULL, NULL, NULL, NULL, 1),
-(11, NULL, NULL, NULL, NULL, 1),
-(12, NULL, NULL, NULL, NULL, 1),
-(13, NULL, NULL, NULL, NULL, 1),
-(14, NULL, NULL, NULL, NULL, 1),
-(15, NULL, NULL, NULL, NULL, 1),
-(16, NULL, NULL, NULL, NULL, 1),
-(17, NULL, NULL, NULL, NULL, 1),
-(18, NULL, NULL, NULL, NULL, 1),
-(19, NULL, NULL, NULL, NULL, 1),
-(20, NULL, NULL, NULL, NULL, 1),
-(21, NULL, NULL, NULL, NULL, 1),
-(22, NULL, NULL, NULL, NULL, 1),
-(23, NULL, NULL, NULL, NULL, 1),
-(24, NULL, NULL, NULL, NULL, 1),
-(25, NULL, NULL, NULL, NULL, 1),
-(26, NULL, NULL, NULL, NULL, 1),
-(27, NULL, NULL, NULL, NULL, 1),
-(28, NULL, NULL, NULL, NULL, 1),
-(29, NULL, NULL, NULL, NULL, 1),
-(30, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `room_13` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`, `fee`, `fee_status`) VALUES
+(1, 12, '2024-11-03', '2024-11-05', '2024-11-29', 0, 416, 'Pending'),
+(2, 12, '2024-11-03', '2024-11-04', '2024-12-07', 0, 566, 'Pending'),
+(3, 12, '2024-11-03', '2024-11-04', '2024-12-07', 0, 0, 'Pending'),
+(4, 12, '2024-11-03', '2024-11-07', '2024-11-23', 0, 0, ''),
+(5, 0, '0000-00-00', '0000-00-00', '0000-00-00', 1, 0, ''),
+(6, NULL, NULL, NULL, NULL, 1, 0, ''),
+(7, NULL, NULL, NULL, NULL, 1, 0, ''),
+(8, NULL, NULL, NULL, NULL, 1, 0, ''),
+(9, NULL, NULL, NULL, NULL, 1, 0, ''),
+(10, NULL, NULL, NULL, NULL, 1, 0, ''),
+(11, NULL, NULL, NULL, NULL, 1, 0, ''),
+(12, NULL, NULL, NULL, NULL, 1, 0, ''),
+(13, NULL, NULL, NULL, NULL, 1, 0, ''),
+(14, NULL, NULL, NULL, NULL, 1, 0, ''),
+(15, NULL, NULL, NULL, NULL, 1, 0, ''),
+(16, NULL, NULL, NULL, NULL, 1, 0, ''),
+(17, NULL, NULL, NULL, NULL, 1, 0, ''),
+(18, NULL, NULL, NULL, NULL, 1, 0, ''),
+(19, NULL, NULL, NULL, NULL, 1, 0, ''),
+(20, NULL, NULL, NULL, NULL, 1, 0, ''),
+(21, NULL, NULL, NULL, NULL, 1, 0, ''),
+(22, NULL, NULL, NULL, NULL, 1, 0, ''),
+(23, NULL, NULL, NULL, NULL, 1, 0, ''),
+(24, NULL, NULL, NULL, NULL, 1, 0, ''),
+(25, NULL, NULL, NULL, NULL, 1, 0, ''),
+(26, NULL, NULL, NULL, NULL, 1, 0, ''),
+(27, NULL, NULL, NULL, NULL, 1, 0, ''),
+(28, NULL, NULL, NULL, NULL, 1, 0, ''),
+(29, NULL, NULL, NULL, NULL, 1, 0, ''),
+(30, NULL, NULL, NULL, NULL, 1, 0, '');
 
 -- --------------------------------------------------------
 
@@ -223,34 +226,36 @@ CREATE TABLE `room_14` (
   `booked_date` date DEFAULT NULL,
   `from` date DEFAULT NULL,
   `to` date DEFAULT NULL,
-  `availability` int(11) DEFAULT 1
+  `availability` int(11) DEFAULT 1,
+  `fee` int(11) NOT NULL,
+  `fee_status` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_14`
 --
 
-INSERT INTO `room_14` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`) VALUES
-(1, NULL, NULL, NULL, NULL, 1),
-(2, NULL, NULL, NULL, NULL, 1),
-(3, NULL, NULL, NULL, NULL, 1),
-(4, NULL, NULL, NULL, NULL, 1),
-(5, NULL, NULL, NULL, NULL, 1),
-(6, NULL, NULL, NULL, NULL, 1),
-(7, NULL, NULL, NULL, NULL, 1),
-(8, NULL, NULL, NULL, NULL, 1),
-(9, NULL, NULL, NULL, NULL, 1),
-(10, NULL, NULL, NULL, NULL, 1),
-(11, NULL, NULL, NULL, NULL, 1),
-(12, NULL, NULL, NULL, NULL, 1),
-(13, NULL, NULL, NULL, NULL, 1),
-(14, NULL, NULL, NULL, NULL, 1),
-(15, NULL, NULL, NULL, NULL, 1),
-(16, NULL, NULL, NULL, NULL, 1),
-(17, NULL, NULL, NULL, NULL, 1),
-(18, NULL, NULL, NULL, NULL, 1),
-(19, NULL, NULL, NULL, NULL, 1),
-(20, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `room_14` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`, `fee`, `fee_status`) VALUES
+(1, 12, '2024-11-03', '2024-11-03', '2024-12-03', 0, 516, 'Pending'),
+(2, 12, '2024-11-03', '2024-11-07', '2024-11-30', 0, 0, 'Pending'),
+(3, 12, '2024-11-03', '2024-11-07', '2024-11-30', 0, 0, ''),
+(4, NULL, NULL, NULL, NULL, 1, 0, ''),
+(5, NULL, NULL, NULL, NULL, 1, 0, ''),
+(6, NULL, NULL, NULL, NULL, 1, 0, ''),
+(7, NULL, NULL, NULL, NULL, 1, 0, ''),
+(8, NULL, NULL, NULL, NULL, 1, 0, ''),
+(9, NULL, NULL, NULL, NULL, 1, 0, ''),
+(10, NULL, NULL, NULL, NULL, 1, 0, ''),
+(11, NULL, NULL, NULL, NULL, 1, 0, ''),
+(12, NULL, NULL, NULL, NULL, 1, 0, ''),
+(13, NULL, NULL, NULL, NULL, 1, 0, ''),
+(14, NULL, NULL, NULL, NULL, 1, 0, ''),
+(15, NULL, NULL, NULL, NULL, 1, 0, ''),
+(16, NULL, NULL, NULL, NULL, 1, 0, ''),
+(17, NULL, NULL, NULL, NULL, 1, 0, ''),
+(18, NULL, NULL, NULL, NULL, 1, 0, ''),
+(19, NULL, NULL, NULL, NULL, 1, 0, ''),
+(20, NULL, NULL, NULL, NULL, 1, 0, '');
 
 -- --------------------------------------------------------
 
@@ -264,54 +269,56 @@ CREATE TABLE `room_15` (
   `booked_date` date DEFAULT NULL,
   `from` date DEFAULT NULL,
   `to` date DEFAULT NULL,
-  `availability` int(11) DEFAULT 1
+  `availability` int(11) DEFAULT 1,
+  `fee` int(11) NOT NULL,
+  `fee_status` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_15`
 --
 
-INSERT INTO `room_15` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`) VALUES
-(1, NULL, NULL, NULL, NULL, 1),
-(2, NULL, NULL, NULL, NULL, 1),
-(3, NULL, NULL, NULL, NULL, 1),
-(4, NULL, NULL, NULL, NULL, 1),
-(5, NULL, NULL, NULL, NULL, 1),
-(6, NULL, NULL, NULL, NULL, 1),
-(7, NULL, NULL, NULL, NULL, 1),
-(8, NULL, NULL, NULL, NULL, 1),
-(9, NULL, NULL, NULL, NULL, 1),
-(10, NULL, NULL, NULL, NULL, 1),
-(11, NULL, NULL, NULL, NULL, 1),
-(12, NULL, NULL, NULL, NULL, 1),
-(13, NULL, NULL, NULL, NULL, 1),
-(14, NULL, NULL, NULL, NULL, 1),
-(15, NULL, NULL, NULL, NULL, 1),
-(16, NULL, NULL, NULL, NULL, 1),
-(17, NULL, NULL, NULL, NULL, 1),
-(18, NULL, NULL, NULL, NULL, 1),
-(19, NULL, NULL, NULL, NULL, 1),
-(20, NULL, NULL, NULL, NULL, 1),
-(21, NULL, NULL, NULL, NULL, 1),
-(22, NULL, NULL, NULL, NULL, 1),
-(23, NULL, NULL, NULL, NULL, 1),
-(24, NULL, NULL, NULL, NULL, 1),
-(25, NULL, NULL, NULL, NULL, 1),
-(26, NULL, NULL, NULL, NULL, 1),
-(27, NULL, NULL, NULL, NULL, 1),
-(28, NULL, NULL, NULL, NULL, 1),
-(29, NULL, NULL, NULL, NULL, 1),
-(30, NULL, NULL, NULL, NULL, 1),
-(31, NULL, NULL, NULL, NULL, 1),
-(32, NULL, NULL, NULL, NULL, 1),
-(33, NULL, NULL, NULL, NULL, 1),
-(34, NULL, NULL, NULL, NULL, 1),
-(35, NULL, NULL, NULL, NULL, 1),
-(36, NULL, NULL, NULL, NULL, 1),
-(37, NULL, NULL, NULL, NULL, 1),
-(38, NULL, NULL, NULL, NULL, 1),
-(39, NULL, NULL, NULL, NULL, 1),
-(40, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `room_15` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`, `fee`, `fee_status`) VALUES
+(1, NULL, NULL, NULL, NULL, 1, 0, ''),
+(2, NULL, NULL, NULL, NULL, 1, 0, ''),
+(3, NULL, NULL, NULL, NULL, 1, 0, ''),
+(4, NULL, NULL, NULL, NULL, 1, 0, ''),
+(5, NULL, NULL, NULL, NULL, 1, 0, ''),
+(6, NULL, NULL, NULL, NULL, 1, 0, ''),
+(7, NULL, NULL, NULL, NULL, 1, 0, ''),
+(8, NULL, NULL, NULL, NULL, 1, 0, ''),
+(9, NULL, NULL, NULL, NULL, 1, 0, ''),
+(10, NULL, NULL, NULL, NULL, 1, 0, ''),
+(11, NULL, NULL, NULL, NULL, 1, 0, ''),
+(12, NULL, NULL, NULL, NULL, 1, 0, ''),
+(13, NULL, NULL, NULL, NULL, 1, 0, ''),
+(14, NULL, NULL, NULL, NULL, 1, 0, ''),
+(15, NULL, NULL, NULL, NULL, 1, 0, ''),
+(16, NULL, NULL, NULL, NULL, 1, 0, ''),
+(17, NULL, NULL, NULL, NULL, 1, 0, ''),
+(18, NULL, NULL, NULL, NULL, 1, 0, ''),
+(19, NULL, NULL, NULL, NULL, 1, 0, ''),
+(20, NULL, NULL, NULL, NULL, 1, 0, ''),
+(21, NULL, NULL, NULL, NULL, 1, 0, ''),
+(22, NULL, NULL, NULL, NULL, 1, 0, ''),
+(23, NULL, NULL, NULL, NULL, 1, 0, ''),
+(24, NULL, NULL, NULL, NULL, 1, 0, ''),
+(25, NULL, NULL, NULL, NULL, 1, 0, ''),
+(26, NULL, NULL, NULL, NULL, 1, 0, ''),
+(27, NULL, NULL, NULL, NULL, 1, 0, ''),
+(28, NULL, NULL, NULL, NULL, 1, 0, ''),
+(29, NULL, NULL, NULL, NULL, 1, 0, ''),
+(30, NULL, NULL, NULL, NULL, 1, 0, ''),
+(31, NULL, NULL, NULL, NULL, 1, 0, ''),
+(32, NULL, NULL, NULL, NULL, 1, 0, ''),
+(33, NULL, NULL, NULL, NULL, 1, 0, ''),
+(34, NULL, NULL, NULL, NULL, 1, 0, ''),
+(35, NULL, NULL, NULL, NULL, 1, 0, ''),
+(36, NULL, NULL, NULL, NULL, 1, 0, ''),
+(37, NULL, NULL, NULL, NULL, 1, 0, ''),
+(38, NULL, NULL, NULL, NULL, 1, 0, ''),
+(39, NULL, NULL, NULL, NULL, 1, 0, ''),
+(40, NULL, NULL, NULL, NULL, 1, 0, '');
 
 -- --------------------------------------------------------
 
@@ -325,64 +332,66 @@ CREATE TABLE `room_17` (
   `booked_date` date DEFAULT NULL,
   `from` date DEFAULT NULL,
   `to` date DEFAULT NULL,
-  `availability` int(11) DEFAULT 1
+  `availability` int(11) DEFAULT 1,
+  `fee` int(11) NOT NULL,
+  `fee_status` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_17`
 --
 
-INSERT INTO `room_17` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`) VALUES
-(1, NULL, NULL, NULL, NULL, 1),
-(2, NULL, NULL, NULL, NULL, 1),
-(3, NULL, NULL, NULL, NULL, 1),
-(4, NULL, NULL, NULL, NULL, 1),
-(5, NULL, NULL, NULL, NULL, 1),
-(6, NULL, NULL, NULL, NULL, 1),
-(7, NULL, NULL, NULL, NULL, 1),
-(8, NULL, NULL, NULL, NULL, 1),
-(9, NULL, NULL, NULL, NULL, 1),
-(10, NULL, NULL, NULL, NULL, 1),
-(11, NULL, NULL, NULL, NULL, 1),
-(12, NULL, NULL, NULL, NULL, 1),
-(13, NULL, NULL, NULL, NULL, 1),
-(14, NULL, NULL, NULL, NULL, 1),
-(15, NULL, NULL, NULL, NULL, 1),
-(16, NULL, NULL, NULL, NULL, 1),
-(17, NULL, NULL, NULL, NULL, 1),
-(18, NULL, NULL, NULL, NULL, 1),
-(19, NULL, NULL, NULL, NULL, 1),
-(20, NULL, NULL, NULL, NULL, 1),
-(21, NULL, NULL, NULL, NULL, 1),
-(22, NULL, NULL, NULL, NULL, 1),
-(23, NULL, NULL, NULL, NULL, 1),
-(24, NULL, NULL, NULL, NULL, 1),
-(25, NULL, NULL, NULL, NULL, 1),
-(26, NULL, NULL, NULL, NULL, 1),
-(27, NULL, NULL, NULL, NULL, 1),
-(28, NULL, NULL, NULL, NULL, 1),
-(29, NULL, NULL, NULL, NULL, 1),
-(30, NULL, NULL, NULL, NULL, 1),
-(31, NULL, NULL, NULL, NULL, 1),
-(32, NULL, NULL, NULL, NULL, 1),
-(33, NULL, NULL, NULL, NULL, 1),
-(34, NULL, NULL, NULL, NULL, 1),
-(35, NULL, NULL, NULL, NULL, 1),
-(36, NULL, NULL, NULL, NULL, 1),
-(37, NULL, NULL, NULL, NULL, 1),
-(38, NULL, NULL, NULL, NULL, 1),
-(39, NULL, NULL, NULL, NULL, 1),
-(40, NULL, NULL, NULL, NULL, 1),
-(41, NULL, NULL, NULL, NULL, 1),
-(42, NULL, NULL, NULL, NULL, 1),
-(43, NULL, NULL, NULL, NULL, 1),
-(44, NULL, NULL, NULL, NULL, 1),
-(45, NULL, NULL, NULL, NULL, 1),
-(46, NULL, NULL, NULL, NULL, 1),
-(47, NULL, NULL, NULL, NULL, 1),
-(48, NULL, NULL, NULL, NULL, 1),
-(49, NULL, NULL, NULL, NULL, 1),
-(50, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `room_17` (`id`, `student_id`, `booked_date`, `from`, `to`, `availability`, `fee`, `fee_status`) VALUES
+(0, 0, '2024-11-03', '2024-11-03', '2024-11-07', 1, 0, ''),
+(2, NULL, NULL, NULL, NULL, 1, 0, ''),
+(3, NULL, NULL, NULL, NULL, 1, 0, ''),
+(4, NULL, NULL, NULL, NULL, 1, 0, ''),
+(5, NULL, NULL, NULL, NULL, 1, 0, ''),
+(6, NULL, NULL, NULL, NULL, 1, 0, ''),
+(7, NULL, NULL, NULL, NULL, 1, 0, ''),
+(8, NULL, NULL, NULL, NULL, 1, 0, ''),
+(9, NULL, NULL, NULL, NULL, 1, 0, ''),
+(10, NULL, NULL, NULL, NULL, 1, 0, ''),
+(11, NULL, NULL, NULL, NULL, 1, 0, ''),
+(12, NULL, NULL, NULL, NULL, 1, 0, ''),
+(13, NULL, NULL, NULL, NULL, 1, 0, ''),
+(14, NULL, NULL, NULL, NULL, 1, 0, ''),
+(15, NULL, NULL, NULL, NULL, 1, 0, ''),
+(16, NULL, NULL, NULL, NULL, 1, 0, ''),
+(17, NULL, NULL, NULL, NULL, 1, 0, ''),
+(18, NULL, NULL, NULL, NULL, 1, 0, ''),
+(19, NULL, NULL, NULL, NULL, 1, 0, ''),
+(20, NULL, NULL, NULL, NULL, 1, 0, ''),
+(21, NULL, NULL, NULL, NULL, 1, 0, ''),
+(22, NULL, NULL, NULL, NULL, 1, 0, ''),
+(23, NULL, NULL, NULL, NULL, 1, 0, ''),
+(24, NULL, NULL, NULL, NULL, 1, 0, ''),
+(25, NULL, NULL, NULL, NULL, 1, 0, ''),
+(26, NULL, NULL, NULL, NULL, 1, 0, ''),
+(27, NULL, NULL, NULL, NULL, 1, 0, ''),
+(28, NULL, NULL, NULL, NULL, 1, 0, ''),
+(29, NULL, NULL, NULL, NULL, 1, 0, ''),
+(30, NULL, NULL, NULL, NULL, 1, 0, ''),
+(31, NULL, NULL, NULL, NULL, 1, 0, ''),
+(32, NULL, NULL, NULL, NULL, 1, 0, ''),
+(33, NULL, NULL, NULL, NULL, 1, 0, ''),
+(34, NULL, NULL, NULL, NULL, 1, 0, ''),
+(35, NULL, NULL, NULL, NULL, 1, 0, ''),
+(36, NULL, NULL, NULL, NULL, 1, 0, ''),
+(37, NULL, NULL, NULL, NULL, 1, 0, ''),
+(38, NULL, NULL, NULL, NULL, 1, 0, ''),
+(39, NULL, NULL, NULL, NULL, 1, 0, ''),
+(40, NULL, NULL, NULL, NULL, 1, 0, ''),
+(41, NULL, NULL, NULL, NULL, 1, 0, ''),
+(42, NULL, NULL, NULL, NULL, 1, 0, ''),
+(43, NULL, NULL, NULL, NULL, 1, 0, ''),
+(44, NULL, NULL, NULL, NULL, 1, 0, ''),
+(45, NULL, NULL, NULL, NULL, 1, 0, ''),
+(46, NULL, NULL, NULL, NULL, 1, 0, ''),
+(47, NULL, NULL, NULL, NULL, 1, 0, ''),
+(48, NULL, NULL, NULL, NULL, 1, 0, ''),
+(49, NULL, NULL, NULL, NULL, 1, 0, ''),
+(50, NULL, NULL, NULL, NULL, 1, 0, '');
 
 -- --------------------------------------------------------
 
@@ -402,7 +411,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`sr_no`, `site_title`, `site_about`, `shutdown`) VALUES
-(1, 'SEUSL ', 'SEUSL Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur nisi voluptatem asperiores cum quibusdam, pariatur perferendis molestiae earum incidunt laborum, distinctio ullam dolores, quisquam explicabo eligendi maiores ratione cupidita', 1);
+(1, 'SEUSL ', 'SEUSL Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur nisi voluptatem asperiores cum quibusdam, pariatur perferendis molestiae earum incidunt laborum, distinctio ullam dolores, quisquam explicabo eligendi maiores ratione cupidita', 0);
 
 -- --------------------------------------------------------
 
@@ -440,16 +449,21 @@ CREATE TABLE `user` (
   `phone_no` int(11) NOT NULL,
   `password` varchar(100) NOT NULL,
   `date_of_birth` date NOT NULL,
-  `profile_pic` varchar(100) NOT NULL
+  `profile_pic` varchar(100) NOT NULL,
+  `book_status` int(11) NOT NULL,
+  `table_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `email`, `address`, `phone_no`, `password`, `date_of_birth`, `profile_pic`) VALUES
-(1, 'test', 'test@gmail.com', 'test', 1254224, '12345', '2024-10-01', 'pexels-gautam-2407455.jpg'),
-(12, 'Kasun Rathnayake', 'madkasunmax@gmail.com', '550/36 A\r\nRanawirugama ,palandagoda', 718948284, '123', '2024-10-10', 'WhatsApp Image 2024-06-03 at 11.59.24 AM.jpeg');
+INSERT INTO `user` (`id`, `name`, `email`, `address`, `phone_no`, `password`, `date_of_birth`, `profile_pic`, `book_status`, `table_name`) VALUES
+(1, 'test1', 'test@gmail.com', 'test', 1254224, '', '0000-00-00', 'whatsapp.jpg.jpeg', 0, ''),
+(12, 'Kasun', 'madkasunmax@gmail.com', '550', 718948284, '123', '2024-10-10', 'WhatsApp Image 2024-06-03 at 11.59.24 AM.jpeg', 0, ''),
+(13, 'lakna', 'kl@gmail.com', 'South Eastern University , Oluvil', 672255062, '12345', '2024-10-26', 'whatsapp.jpg.jpeg', 0, ''),
+(14, 'lakna', 'kl@gmail.com', 'South Eastern University , Oluvil', 672255062, '1234', '2024-10-24', 'whatsapp.jpg.jpeg', 0, ''),
+(15, 'lakna', 'kl@gmail.com', 'South Eastern University , Oluvil', 672255062, '12345', '2024-10-19', 'whatsapp.jpg.jpeg', 0, '');
 
 -- --------------------------------------------------------
 
@@ -593,13 +607,13 @@ ALTER TABLE `features`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `room_13`
 --
 ALTER TABLE `room_13`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `room_14`
@@ -635,13 +649,13 @@ ALTER TABLE `team_details`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_queries`
 --
 ALTER TABLE `user_queries`
-  MODIFY `sr_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `sr_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
