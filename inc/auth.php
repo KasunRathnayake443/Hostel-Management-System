@@ -72,7 +72,7 @@ if (isset($_POST['login'])) {
             $_SESSION['user_name'] = $user['name'];
             echo "<script> document.location='../index.php'</script>";
         } else {
-            echo "<script>alert('Invalid email or password!')</script>";
+            echo "<script>alert('Invalid email or password!'); document.location='../index.php'; </script>";
         }
     } else {
         echo "<script>alert('Invalid email or password!'); document.location='../index.php';</script>";

@@ -44,12 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-  
-    if (isset($_POST['shutdown'])) {
-        $shutdown_status = $_POST['shutdown'] ? 1 : 0;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Check if the shutdown checkbox is present in the form
+        $shutdown_status = isset($_POST['shutdown']) ? 1 : 0;
+    
+        // Update shutdown status in the database
         $conn->query("UPDATE settings SET shutdown='$shutdown_status' WHERE sr_no=1");
+    
+        // Refresh the page to reflect the updated setting
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
     }
 }
+
+
 
 
 $generalSettings = $conn->query("SELECT * FROM settings WHERE sr_no=1")->fetch_assoc();

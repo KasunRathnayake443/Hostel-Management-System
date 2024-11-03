@@ -148,7 +148,7 @@ include 'connection.php'; ?>
             </div>
 
             <div class="d-flex justify-content-evenly mb-2">
-              <a href="book_room.php?room_id=<?php echo $room['id']; ?>" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
+              <a href="room.php?room_id=<?php echo $room['id']; ?>" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
               <a href="room.php" class="btn btn-sm btn-outline-dark shadow-none">More Details</a>
             </div>
           </div>

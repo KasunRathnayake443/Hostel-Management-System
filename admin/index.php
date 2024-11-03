@@ -44,6 +44,7 @@ if ((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] === true)) {
     </form>
 </div>
 
+
 <?php 
 
 if(isset($_POST['login']))  
@@ -67,6 +68,22 @@ if(isset($_POST['login']))
  
 }
 ?>
+
+<?php 
+$book_btn = "";
+
+if (isset($settings['shutdown']) && !$settings['shutdown']){
+    $login=0;
+    if(isset($_SESSION['login']) && $_SESSION['login']==true){
+        $login=1;
+    }
+    $book_btn = "<button onclick='checkLoginToBook($login,$room_data[id])' class='btn btn-sm text-white custom-bg shadow-none'>Book Now</button>";
+}
+
+?>
+
+
+
 
 <?php require('script.php')?>
 
