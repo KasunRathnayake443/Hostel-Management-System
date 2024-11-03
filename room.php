@@ -304,7 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book'])) {
 
     if ($stmt->execute()) {
       
-        $update_status_sql = "UPDATE user SET book_status = 1 WHERE id = ?";
+        $update_status_sql = "UPDATE user SET book_status = 1 , table_name = room_$  WHERE id = ?";
         $update_stmt = $conn->prepare($update_status_sql);
         $update_stmt->bind_param('i', $user_id);
         $update_stmt->execute();

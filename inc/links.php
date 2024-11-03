@@ -7,14 +7,13 @@
     <?php
     $result = $conn->query("SELECT shutdown FROM settings WHERE sr_no=1");
 
-// Check if the query was successful and fetch the settings data
 if ($result) {
     $settings = $result->fetch_assoc();
 } else {
     die("Error fetching settings: " . $conn->error);
 }
 
-// Display shutdown alert if shutdown mode is on
+
 if ($settings['shutdown']) {
     echo <<<alertbar
     <div class='bg-danger text-center p-2 fw-bold'>

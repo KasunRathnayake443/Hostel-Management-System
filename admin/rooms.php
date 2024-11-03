@@ -34,13 +34,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_room_form'])) {
     $stmt->execute();
     $room_id = $stmt->insert_id;
 
+
+$insert_table_name = "UPDATE rooms SET table_name = 'room_$room_id' WHERE id = ?";
+
+
+$insert_table_name_stmt = $conn->prepare($insert_table_name);
+
+
+if ($insert_table_name_stmt) {
+    
+    $insert_table_name_stmt->bind_param("i", $room_id);
+    $insert_table_name_stmt->execute();
+    $insert_table_name_stmt->close();
+} else {
+    
+    echo "Error preparing the statement: " . $conn->error;
+}
+
+    
+
+    
+
     $create_table_query = "CREATE TABLE room_$room_id (
         id INT AUTO_INCREMENT PRIMARY KEY,
         student_id INT,
         booked_date DATE,
         `from` DATE,
         `to` DATE,
-        availability INT DEFAULT 1
+        availability INT DEFAULT 1,
+        fee INT,
+        fee_status VARCHAR(20) DEFAULT 'Pending'
     )";
     $conn->query($create_table_query);
 
