@@ -154,6 +154,10 @@ while ($room = $result->fetch_assoc()) {
                            <p><strong>Price:</strong> <span id="roomFees"></span> per month</p>
                            <p><strong>Description:</strong> <span id="roomDescription"></span></p>
                            <p><strong>Available Rooms:</strong> <span id="roomAvailable"></span></p>
+                           <p><strong>Total Price:</strong> RS :<span id="totalPrice">0</span></p>
+                           <input type="hidden" id="totalPriceInput" name="total_price">
+
+
 
                           
                            <form method="POST" action="room.php" id="bookingForm">
@@ -222,6 +226,39 @@ while ($room = $result->fetch_assoc()) {
         var startDate = this.value;
         document.getElementById('endDate').setAttribute('min', startDate);
     });
+
+
+    document.getElementById('startDate').addEventListener('change', calculateTotalPrice);
+document.getElementById('endDate').addEventListener('change', calculateTotalPrice);
+
+function calculateTotalPrice() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const roomFees = parseFloat(document.getElementById('roomFees').textContent); 
+
+    if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        
+        let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+
+        if (end.getDate() > start.getDate()) {
+            months += 1;
+        }
+
+        if (months > 0) {
+            const totalPrice = roomFees * months;
+            document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+            document.getElementById('totalPriceInput').value = totalPrice.toFixed(2);
+        } else {
+            document.getElementById('totalPrice').textContent = '0';
+            document.getElementById('totalPriceInput').value = '0';
+        }
+    }
+}
+
+
 </script>
 
 
@@ -231,7 +268,6 @@ while ($room = $result->fetch_assoc()) {
 
 
 <?php
-
 
 if (!isset($_SESSION['user_id'])) {
     echo "<script>
@@ -246,8 +282,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book'])) {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
     $user_id = $_SESSION['user_id'];
+    $total_price = intval($_POST['total_price']); 
 
-    
+  
     $status_check_sql = "SELECT book_status FROM user WHERE id = ?";
     $stmt = $conn->prepare($status_check_sql);
     $stmt->bind_param('i', $user_id);
@@ -264,6 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book'])) {
         exit;
     }
 
+   
     $today = date('Y-m-d');
     if ($start_date < $today) {
         echo "<script>
@@ -281,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book'])) {
         exit;
     }
 
-
+  
     $check_sql = "SELECT id FROM room_$room_id WHERE availability = 1 LIMIT 1";
     $stmt = $conn->prepare($check_sql);
     $stmt->execute();
@@ -297,16 +335,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book'])) {
         exit;
     }
 
- 
-    $book_sql = "UPDATE room_$room_id SET student_id = ?, booked_date = NOW(), `from` = ?, `to` = ?, availability = 0 WHERE id = ?";
+   
+    $book_sql = "UPDATE room_$room_id 
+                 SET student_id = ?, booked_date = NOW(), `from` = ?, `to` = ?, 
+                     availability = 0, fee = ?, fee_status = 'Pending' 
+                 WHERE id = ?";
     $stmt = $conn->prepare($book_sql);
-    $stmt->bind_param('issi', $user_id, $start_date, $end_date, $available_room_id);
+    $stmt->bind_param('issii', $user_id, $start_date, $end_date, $total_price, $available_room_id); 
 
     if ($stmt->execute()) {
-      
-        $update_status_sql = "UPDATE user SET book_status = 1 , table_name = room_$  WHERE id = ?";
+       
+        $update_status_sql = "UPDATE user SET book_status = 1, table_name = ? WHERE id = ?";
+        $table_name = "room_$room_id";
         $update_stmt = $conn->prepare($update_status_sql);
-        $update_stmt->bind_param('i', $user_id);
+        $update_stmt->bind_param('si', $table_name, $user_id);
         $update_stmt->execute();
         $update_stmt->close();
 
