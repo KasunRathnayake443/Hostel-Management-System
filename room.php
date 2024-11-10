@@ -155,7 +155,9 @@ while ($room = $result->fetch_assoc()) {
                            <p><strong>Description:</strong> <span id="roomDescription"></span></p>
                            <p><strong>Available Rooms:</strong> <span id="roomAvailable"></span></p>
                            <p><strong>Total Price:</strong> RS :<span id="totalPrice">0</span></p>
-                           <input type="hidden" id="totalPriceInput" name="total_price">
+                           <input type="hidden" id="totalPriceInput" name="total_price" value="0">
+                              
+
 
 
 
@@ -228,7 +230,7 @@ while ($room = $result->fetch_assoc()) {
     });
 
 
-    document.getElementById('startDate').addEventListener('change', calculateTotalPrice);
+document.getElementById('startDate').addEventListener('change', calculateTotalPrice);
 document.getElementById('endDate').addEventListener('change', calculateTotalPrice);
 
 function calculateTotalPrice() {
@@ -241,6 +243,13 @@ function calculateTotalPrice() {
         const end = new Date(endDate);
 
         
+        if (end <= start) {
+            document.getElementById('totalPrice').textContent = '0';
+            document.getElementById('totalPriceInput').value = '0';
+            return;
+        }
+
+      
         let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
 
         if (end.getDate() > start.getDate()) {
@@ -257,6 +266,7 @@ function calculateTotalPrice() {
         }
     }
 }
+
 
 
 </script>
@@ -276,6 +286,10 @@ if (!isset($_SESSION['user_id'])) {
           </script>";
     exit;
 }
+
+
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book'])) {
     $room_id = intval($_POST['room_id']);

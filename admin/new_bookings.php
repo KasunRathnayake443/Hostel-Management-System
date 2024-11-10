@@ -1,64 +1,12 @@
 <?php
-// Include essential files and database configurations
+
 require('essentials.php');
 require('db_config.php');
 include '../connection.php';
 
-// Ensure admin is logged in
+
 adminLogin();
 
-// Add Booking
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_booking'])) {
-    $user_id = $_POST['user_id'];
-    $room_id = $_POST['room_id'];
-    $booking_date = $_POST['booking_date'];
-    $duration = $_POST['duration'];
-
-    // Insert booking query
-    $stmt = $conn->prepare("INSERT INTO bookings (user_id, room_id, booking_date, duration) VALUES (?, ?, ?, ?)");
-    if ($stmt) {
-        $stmt->bind_param("iiss", $user_id, $room_id, $booking_date, $duration);
-        if ($stmt->execute()) {
-            $stmt->close();
-            header('Location: bookings.php'); // Redirect on success
-            exit();
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-    } else {
-        echo "Error: " . $conn->error;
-    }
-}
-
-// Delete Booking
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_booking'])) {
-    $id = $_POST['booking_id'];
-
-    // Delete booking query
-    $stmt = $conn->prepare("DELETE FROM bookings WHERE id=?");
-    if ($stmt) {
-        $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            $stmt->close();
-            header('Location: bookings.php'); // Redirect on success
-            exit();
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-    } else {
-        echo "Error: " . $conn->error;
-    }
-}
-
-// Fetch all bookings
-$bookings = $conn->query("SELECT bookings.*, users.name as user_name, rooms.room_number 
-                          FROM bookings 
-                          JOIN users ON bookings.user_id = users.id 
-                          JOIN rooms ON bookings.room_id = rooms.id");
-
-if (!$bookings) {
-    die("Error fetching bookings: " . $conn->error);
-}
 ?>
 
 
@@ -74,52 +22,100 @@ if (!$bookings) {
 
 <?php require('header.php'); ?>
 
+<?php
+$booking = $conn->query("SELECT * From user WHERE book_status = 1");
+
+
+?>
+
 <div class="container-fluid" id="main-content">
     <div class="row">
         <div class="col-lg-10 ms-auto p-4 overflow-hidden">
             <h3 class="mb-4">New Bookings</h3>
 
-            <!-- Add Booking Button -->
             <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addBookingModal">Add New Booking</button>
 
-            <!-- Booking List Table -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover border">
-                            <thead>
-                                <tr class="bg-dark text-light">
-                                    <th scope="col">#</th>
-                                    <th scope="col">User</th>
-                                    <th scope="col">Room</th>
-                                    <th scope="col">Booking Date</th>
-                                    <th scope="col">Duration</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($booking = $bookings->fetch_assoc()): ?>
-                                    <tr>
-                                        <td><?= $booking['id'] ?></td>
-                                        <td><?= $booking['user_name'] ?></td>
-                                        <td><?= $booking['room_number'] ?></td>
-                                        <td><?= $booking['booking_date'] ?></td>
-                                        <td><?= $booking['duration'] ?> days</td>
-                                        <td>
-                                            <!-- Delete Booking Action -->
-                                            <form method="POST" class="d-inline">
-                                                <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-                                                <button type="submit" name="delete_booking" class="btn btn-danger btn-sm">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover border">
+                <thead>
+                    <tr class="bg-dark text-light">
+                        <th scope="col">#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Room Type</th>
+                        <th scope="col">Room ID</th>
+                        <th scope="col">Booking Date</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Total Fee</th>
+                        <th scope="col">Payment Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $index = 1; 
+                    
+                    while ($user = $booking->fetch_assoc()) {
+                        $name = $user['name'];
+                        $table_name = $user['table_name'];
 
+                        
+                        $booking_details = $conn->query("SELECT id, booked_date, `from`, `to`, fee_status FROM $table_name LIMIT 1");
+
+                        if ($booking_details && $details = $booking_details->fetch_assoc()) {
+                            $room_Id = $details['id'];
+                            $booked_date = $details['booked_date'];
+                            $start_date = $details['from'];
+                            $end_date = $details['to'];
+                            $payment_status = $details['fee_status'];
+                            
+
+                            $room_name_query = "SELECT name, fees FROM rooms WHERE table_name = ?";
+                            $stml = $conn->prepare($room_name_query);
+                            $stml->bind_param("s", $table_name);
+                            $stml->execute();
+                            $stml->bind_result($room_name, $room_fees);
+                            $stml->fetch();
+                           
+
+                            $start = new DateTime($start_date);
+                            $end = new DateTime($end_date);
+
+                            $interval = $start->diff($end);
+                            $days_difference = $interval->days;
+
+                            $months = ceil($days_difference / 30);
+                            $total_fee = $room_fees * $months;
+
+
+
+                           
+
+
+                            
+                            echo "<tr>
+                                    <th scope='row'>{$index}</th>
+                                    <td>" . htmlspecialchars($name) . "</td>
+                                    <td>" . htmlspecialchars($room_name) . "</td>
+                                    <td>" . htmlspecialchars($room_Id) . "</td>
+                                    <td>" . htmlspecialchars($booked_date) . "</td>
+                                    <td>" . htmlspecialchars($start_date) . "</td>
+                                    <td>" . htmlspecialchars($end_date) . "</td>
+                                    <td>" . htmlspecialchars($total_fee) . "</td>
+                                    <td>" . htmlspecialchars($payment_status) . "</td>
+                                    <td><a href='#' class='btn btn-sm btn-primary'>View</a></td>
+                                  </tr>";
+                            $index++;
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 </div>

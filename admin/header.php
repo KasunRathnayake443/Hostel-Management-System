@@ -57,9 +57,7 @@
   <li class="nav-item">
     <a class="nav-link text-white" href="rooms.php">Rooms</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link text-white" href="rooms.php">Ratings & Reviews</a>
-  </li>
+ 
   <li class="nav-item">
     <a class="nav-link text-white" href="features_facilities.php">Features & Facilities</a>
   </li>

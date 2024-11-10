@@ -14,55 +14,86 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $update_message = '';
 
+
 $user_sql = "SELECT name, email, phone_no, address, book_status, table_name FROM user WHERE id = ?";
 $stmt = $conn->prepare($user_sql);
+if (!$stmt) {
+    die("Prepared statement failed: " . $conn->error); 
+}
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $stmt->bind_result($name, $email, $phone_no, $address, $book_status, $table_name);
 $stmt->fetch();
 $stmt->close();
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_profile'])) {
+ 
     $new_name = $_POST['name'];
     $new_email = $_POST['email'];
     $new_phone = $_POST['phone'];
     $new_address = $_POST['address'];
 
-    $update_sql = "UPDATE user SET name = ?, email = ?, phone_no = ?, address = ? WHERE id = ?";
-    $stmt = $conn->prepare($update_sql);
-    $stmt->bind_param('sssii', $new_name, $new_email, $new_phone, $new_address, $user_id);
-
-    if ($stmt->execute()) {
-        $update_message = "Profile updated successfully.";
-        $name = $new_name;
-        $email = $new_email;
-        $phone_no = $new_phone;
-        $address = $new_address;
+    
+    if (empty($new_name) || empty($new_email) || empty($new_phone) || empty($new_address)) {
+        $update_message = "All fields are required.";
     } else {
-        $update_message = "Failed to update profile. Please try again.";
-    }
+        
+        $update_sql = "UPDATE user SET name = ?, email = ?, phone_no = ?, address = ? WHERE id = ?";
+        $stmt = $conn->prepare($update_sql);
+        if (!$stmt) {
+            die("Prepared statement failed: " . $conn->error); 
+        }
+        
+        $stmt->bind_param('sssii', $new_name, $new_email, $new_phone, $new_address, $user_id);
 
-    $stmt->close();
+        if ($stmt->execute()) {
+            $update_message = "Profile updated successfully.";
+            $name = $new_name;
+            $email = $new_email;
+            $phone_no = $new_phone;
+            $address = $new_address;
+        } else {
+            $update_message = "Failed to update profile. Please try again.";
+        }
+
+        $stmt->close();
+    }
 }
+
 
 $has_booking = false;
 if ($book_status == 1 && !empty($table_name)) {
-    $booking_sql = "SELECT id, booked_date, `from`, `to` FROM $table_name WHERE student_id = ? LIMIT 1";
+    $booking_sql = "SELECT id, booked_date, `from`, `to`, fee_status FROM $table_name WHERE student_id = ? LIMIT 1";
     $stmt = $conn->prepare($booking_sql);
     $stmt->bind_param('i', $user_id);
     $stmt->execute();
-    $stmt->bind_result($room_id, $booked_date, $start_date, $end_date);
+    $stmt->bind_result($room_id, $booked_date, $start_date, $end_date, $fee_status);
     $has_booking = $stmt->fetch();
     $stmt->close();
 
-    $room_name_query = "SELECT name FROM rooms WHERE table_name = ?";
+    $room_name_query = "SELECT name, fees FROM rooms WHERE table_name = ?";
     $stml = $conn->prepare($room_name_query);
     $stml->bind_param("s", $table_name);
     $stml->execute();
-    $stml->bind_result($room_name);
+    $stml->bind_result($room_name, $room_fees);
     $stml->fetch();
     $stml->close();
 }
+
+$start = new DateTime($start_date);
+$end = new DateTime($end_date);
+
+
+$interval = $start->diff($end);
+$days_difference = $interval->days;
+
+
+$months = ceil($days_difference / 30);  
+
+
+$total_fee = $room_fees * $months;
+
 ?>
 
 <!DOCTYPE html>
@@ -210,6 +241,8 @@ if ($book_status == 1 && !empty($table_name)) {
                     <p><strong>Booked Date:</strong> <?php echo htmlspecialchars($booked_date); ?></p>
                     <p><strong>Start Date:</strong> <?php echo htmlspecialchars($start_date); ?></p>
                     <p><strong>End Date:</strong> <?php echo htmlspecialchars($end_date); ?></p>
+                    <p><strong>Total Fee:</strong> Rs. <?php echo htmlspecialchars(number_format($total_fee, 2)); ?></p>
+                    <p><strong>Payment Status : </strong><?php echo htmlspecialchars($fee_status); ?></p>
                 <?php else: ?>
                     <p class="no-booking">No booking details found.</p>
                 <?php endif; ?>
